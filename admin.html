@@ -1,1 +1,107 @@
+```html
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin - TOPUP BAZAAR BD</title>
+<style>
+*{box-sizing:border-box}
+body{
+margin:0;
+background:#080d19;
+color:white;
+font-family:Arial,sans-serif;
+}
+header{
+background:#111d34;
+padding:20px;
+text-align:center;
+color:#00e5ff;
+font-size:24px;
+font-weight:bold;
+}
+.box{
+max-width:450px;
+margin:50px auto;
+padding:25px;
+background:#14213a;
+border-radius:15px;
+}
+h2{text-align:center;color:#00e5ff}
+input{
+width:100%;
+padding:14px;
+margin:10px 0;
+background:#081426;
+border:1px solid #345;
+color:white;
+border-radius:7px;
+}
+button{
+width:100%;
+padding:13px;
+background:#00d9ff;
+border:0;
+border-radius:7px;
+font-weight:bold;
+cursor:pointer;
+}
+#dashboard{display:none}
+.card{
+background:#1b2b49;
+padding:20px;
+margin:15px 0;
+border-radius:10px;
+}
+</style>
+</head>
+<body>
+
+<header>👑 TOPUP BAZAAR BD ADMIN</header>
+
+<div class="box" id="login">
+<h2>Admin Login</h2>
+<input type="email" id="email" placeholder="Admin Email">
+<input type="password" id="password" placeholder="Password">
+<button onclick="login()">LOGIN</button>
+<p id="msg"></p>
+</div>
+
+<div class="box" id="dashboard">
+<h2>Welcome Admin!</h2>
+
+<div class="card">
+<h3>📦 Order Management</h3>
+<p>Orders: Firebase connection pending</p>
+</div>
+
+<div class="card">
+<h3>💎 Package Management</h3>
+<p>Package editing: Firebase connection pending</p>
+</div>
+
+<div class="card">
+<h3>💰 Sales Report</h3>
+<p>Sales: Firebase connection pending</p>
+</div>
+
+<button onclick="logout()">LOGOUT</button>
+</div>
+
+<script>
+function login(){
+document.getElementById('msg').innerText=
+"Firebase connection এখনো সেটআপ করা হয়নি।";
+}
+
+function logout(){
+document.getElementById('dashboard').style.display='none';
+document.getElementById('login').style.display='block';
+}
+</script>
+
+</body>
+</html>
+```
 
