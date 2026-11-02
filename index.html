@@ -9,87 +9,104 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{
-font-family:Arial,sans-serif;
-background:#080d19;
+background:#070b16;
 color:white;
+font-family:Arial,sans-serif;
 }
 header{
-background:#101a2e;
-padding:22px;
-text-align:center;
+background:#10182a;
+padding:20px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+flex-wrap:wrap;
 border-bottom:2px solid #00d9ff;
 }
-header h1{color:#00e5ff;font-size:28px}
-header p{color:#aaa;margin-top:8px}
+.logo{font-size:23px;color:#00e5ff;font-weight:bold}
+nav a{
+color:white;
+text-decoration:none;
+margin:10px;
+}
 .hero{
 text-align:center;
-padding:45px 15px;
-background:linear-gradient(135deg,#101d38,#07101e);
+padding:65px 15px;
+background:linear-gradient(135deg,#10264b,#080d19);
 }
-.hero h2{font-size:30px;color:#00e5ff}
+.hero h1{
+font-size:36px;
+color:#00e5ff;
+}
 .hero p{margin:15px;color:#ccc}
 .container{
 max-width:1100px;
 margin:auto;
-padding:25px 15px;
+padding:35px 15px;
 }
 .title{
 text-align:center;
-margin-bottom:25px;
 color:#00e5ff;
+margin-bottom:30px;
 }
 .games{
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-gap:18px;
+gap:20px;
 }
 .card{
-background:#14213a;
-padding:25px;
+background:#121e35;
+border:1px solid #24466b;
 border-radius:15px;
+padding:25px;
 text-align:center;
-border:1px solid #263c60;
 transition:.3s;
 }
 .card:hover{
-transform:translateY(-5px);
+transform:translateY(-7px);
 border-color:#00e5ff;
+box-shadow:0 0 18px #007caa55;
 }
-.icon{font-size:45px}
-.card h3{margin:12px 0}
+.icon{font-size:48px}
+.card h3{margin:12px}
+.card p{color:#aaa}
 button{
-background:#00cfff;
-color:#00101c;
+background:#00d9ff;
 border:none;
-padding:12px 22px;
+padding:12px 20px;
 border-radius:8px;
 font-weight:bold;
 cursor:pointer;
-margin-top:15px;
 }
-button:hover{background:#fff}
+button:hover{background:white}
+.card button{margin-top:18px}
 .order{
-background:#14213a;
+max-width:520px;
+margin:35px auto;
+background:#121e35;
 padding:25px;
 border-radius:15px;
-max-width:500px;
-margin:35px auto;
+border:1px solid #24466b;
 }
 input,select{
 width:100%;
-padding:13px;
+padding:14px;
 margin:9px 0;
 border-radius:7px;
 border:1px solid #345;
-background:#081426;
+background:#080f20;
 color:white;
 }
+.order button{width:100%;margin-top:15px}
+.note{
+color:#ffc857;
+font-size:13px;
+margin-top:12px;
+}
 footer{
-background:#101a2e;
+background:#10182a;
+padding:30px;
 text-align:center;
-padding:25px;
 color:#aaa;
-margin-top:30px;
 }
 </style>
 </head>
@@ -97,63 +114,67 @@ margin-top:30px;
 <body>
 
 <header>
-<h1>🎮 TOPUP BAZAAR BD</h1>
-<p>Your Ultimate Gaming Top-Up Store</p>
+<div class="logo">🎮 TOPUP BAZAAR BD</div>
+<nav>
+<a href="#">Home</a>
+<a href="#games">Games</a>
+<a href="#order">Order</a>
+</nav>
 </header>
 
 <section class="hero">
-<h2>Welcome Gamers! 🔥</h2>
-<p>Buy Your Favourite Game Top-Up Easily</p>
+<h1>WELCOME GAMERS 🔥</h1>
+<p>Your Ultimate Gaming Top-Up Marketplace</p>
 <button onclick="document.getElementById('games').scrollIntoView({behavior:'smooth'})">
-Explore Games
+SHOP NOW
 </button>
 </section>
 
-<div class="container" id="games">
-<h2 class="title">🔥 OUR GAMES</h2>
+<section class="container" id="games">
+<h2 class="title">🔥 SELECT YOUR GAME</h2>
 
 <div class="games">
 
 <div class="card">
 <div class="icon">🔥</div>
 <h3>Free Fire</h3>
-<p>Diamonds Top-Up</p>
-<button onclick="choose('Free Fire')">Buy Now</button>
+<p>Diamond Packages</p>
+<button onclick="choose('Free Fire')">BUY NOW</button>
 </div>
 
 <div class="card">
 <div class="icon">🔫</div>
 <h3>PUBG Mobile</h3>
-<p>UC Top-Up</p>
-<button onclick="choose('PUBG Mobile')">Buy Now</button>
+<p>UC Packages</p>
+<button onclick="choose('PUBG Mobile')">BUY NOW</button>
 </div>
 
 <div class="card">
 <div class="icon">⚽</div>
 <h3>FC Mobile</h3>
 <p>FC Points</p>
-<button onclick="choose('FC Mobile')">Buy Now</button>
+<button onclick="choose('FC Mobile')">BUY NOW</button>
 </div>
 
 <div class="card">
 <div class="icon">🎯</div>
 <h3>eFootball</h3>
-<p>Coins Top-Up</p>
-<button onclick="choose('eFootball')">Buy Now</button>
+<p>Coins Packages</p>
+<button onclick="choose('eFootball')">BUY NOW</button>
 </div>
 
 <div class="card">
 <div class="icon">🏆</div>
 <h3>Mobile Legends</h3>
 <p>Diamonds</p>
-<button onclick="choose('Mobile Legends')">Buy Now</button>
+<button onclick="choose('Mobile Legends')">BUY NOW</button>
 </div>
 
 <div class="card">
 <div class="icon">🎮</div>
 <h3>Roblox</h3>
-<p>Robux</p>
-<button onclick="choose('Roblox')">Buy Now</button>
+<p>Robux Packages</p>
+<button onclick="choose('Roblox')">BUY NOW</button>
 </div>
 
 </div>
@@ -162,11 +183,12 @@ Explore Games
 <h2 class="title">🛒 PLACE YOUR ORDER</h2>
 
 <form onsubmit="sendOrder(event)">
+
 <input id="game" placeholder="Selected Game" readonly required>
 
-<input id="player" placeholder="Player ID / UID" required>
+<input id="uid" placeholder="Player ID / UID" required>
 
-<select id="package" required>
+<select id="pack" required>
 <option value="">Select Package</option>
 <option>Small Package</option>
 <option>Medium Package</option>
@@ -180,19 +202,20 @@ Explore Games
 <option>Rocket</option>
 </select>
 
-<input id="number" placeholder="Your Payment Number" required>
+<button type="submit">ORDER ON WHATSAPP</button>
 
-<button type="submit" style="width:100%">
-Submit Order
-</button>
 </form>
+
+<p class="note">
+Demo Store: পেমেন্ট করার আগে Admin-এর সঙ্গে যোগাযোগ করুন।
+</p>
 </div>
-</div>
+</section>
 
 <footer>
-<h3>TOPUP BAZAAR BD 🎮</h3>
-<p>Thank You For Visiting Our Store!</p>
-<p>© 2026 TOPUP BAZAAR BD</p>
+<h3>🎮 TOPUP BAZAAR BD</h3>
+<p>Your Trusted Gaming Store</p>
+<p>© 2026 All Rights Reserved</p>
 </footer>
 
 <script>
@@ -204,19 +227,29 @@ document.getElementById('order').scrollIntoView({behavior:'smooth'});
 function sendOrder(e){
 e.preventDefault();
 
-let game=document.getElementById('game').value;
-let player=document.getElementById('player').value;
-let pack=document.getElementById('package').value;
-let payment=document.getElementById('payment').value;
-let number=document.getElementById('number').value;
+const game=document.getElementById('game').value;
+const uid=document.getElementById('uid').value;
+const pack=document.getElementById('pack').value;
+const payment=document.getElementById('payment').value;
 
-let message=`New Order%0A Game: ${game}%0A Player ID: ${player}%0A Package: ${pack}%0A Payment: ${payment}%0A Number: ${number}`;
+// নিজের WhatsApp নম্বর এখানে বসাবে
+const adminNumber="8801XXXXXXXXX";
 
-alert("Demo Order Submitted! Connect WhatsApp to receive real orders.");
+const msg=`New Order - TOPUP BAZAAR BD
+Game: ${game}
+Player ID: ${uid}
+Package: ${pack}
+Payment: ${payment}`;
+
+if(adminNumber==="8801XXXXXXXXX"){
+alert("Admin WhatsApp number সেট করা হয়নি।");
+return;
+}
+
+window.open("https://wa.me/"+adminNumber+"?text="+encodeURIComponent(msg),"_blank");
 }
 </script>
 
 </body>
 </html>
 ```
-
