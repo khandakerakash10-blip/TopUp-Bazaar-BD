@@ -3,36 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>TOPUP BAZAAR BD - Admin</title>
+<title>TOPUP BAZAAR BD Admin</title>
 
 <style>
 *{box-sizing:border-box}
-body{
-  margin:0;background:#080d18;color:white;
-  font-family:Arial,sans-serif;padding:20px
-}
+body{margin:0;padding:20px;background:#080d18;color:white;font-family:Arial}
 .container{max-width:850px;margin:30px auto}
-.box{
-  background:#111c30;padding:25px;border-radius:15px;
-  border:1px solid #174b75;margin-bottom:20px
-}
+.box{background:#111c30;padding:25px;border-radius:15px;border:1px solid #174b75;margin-bottom:20px}
 h1,h2{color:#00c8ff}
-input,button{
-  width:100%;padding:13px;margin:8px 0;
-  border-radius:8px;border:0;font-size:15px
-}
-input{background:#eaf4ff;color:#111}
-button{
-  background:#00bfff;color:#00111c;
-  font-weight:bold;cursor:pointer
-}
+input,button{width:100%;padding:13px;margin:8px 0;border-radius:8px;font-size:15px}
+input{background:#eaf4ff;color:#111;border:0}
+button{background:#00bfff;color:#00111c;font-weight:bold;border:0;cursor:pointer}
 .logout{background:#ff4055;color:white}
-.item{
-  background:#192943;padding:15px;
-  margin:10px 0;border-radius:9px
-}
+.item{background:#192943;padding:15px;margin:10px 0;border-radius:9px}
 .hidden{display:none}
-.small{color:#a9bdd5;font-size:13px}
+.small{color:#a9bdd5}
 </style>
 </head>
 
@@ -55,6 +40,20 @@ button{
 <div class="box">
 <h2>Welcome Admin 👑</h2>
 <button class="logout" onclick="logout()">LOGOUT</button>
+</div>
+
+<div class="box">
+<h2>💳 Payment Settings</h2>
+<p class="small">বাবার অনুমতি নিয়ে টাকা গ্রহণের নম্বর বসাবে।</p>
+
+<label>bKash Number</label>
+<input id="bkash" placeholder="01710531327">
+
+<label>Nagad Number</label>
+<input id="nagad" placeholder="01710531327">
+
+<button onclick="savePayment()">SAVE PAYMENT NUMBERS</button>
+<p id="paymentMessage"></p>
 </div>
 
 <div class="box">
@@ -101,15 +100,14 @@ const db = firebase.firestore();
 const ADMIN_UID = "YsT6eOaoFjbFqMraxraLuLtK64n2";
 
 function login(){
-  const email = document.getElementById("email").value.trim();
-  const password = document.getElementById("password").value;
+  const email=document.getElementById("email").value.trim();
+  const password=document.getElementById("password").value;
 
-  document.getElementById("message").innerText = "লগইন হচ্ছে...";
+  document.getElementById("message").innerText="লগইন হচ্ছে...";
 
   auth.signInWithEmailAndPassword(email,password)
   .catch(error=>{
-    document.getElementById("message").innerText =
-      "Login Error: " + error.message;
+    document.getElementById("message").innerText=error.message;
   });
 }
 
@@ -118,11 +116,12 @@ function logout(){
 }
 
 auth.onAuthStateChanged(user=>{
-  if(user && user.uid === ADMIN_UID){
+  if(user && user.uid===ADMIN_UID){
     document.getElementById("loginBox").classList.add("hidden");
     document.getElementById("dashboard").classList.remove("hidden");
     loadPackages();
     loadOrders();
+    loadPayment();
   }else{
     if(user) auth.signOut();
     document.getElementById("loginBox").classList.remove("hidden");
@@ -130,12 +129,49 @@ auth.onAuthStateChanged(user=>{
   }
 });
 
-async function addPackage(){
-  const game = document.getElementById("game").value.trim();
-  const name = document.getElementById("packageName").value.trim();
-  const price = Number(document.getElementById("price").value);
+async function savePayment(){
+  const bkash=document.getElementById("bkash").value.trim();
+  const nagad=document.getElementById("nagad").value.trim();
 
-  if(!game || !name || !price || price <= 0){
+  if(!/^01[3-9]\d{8}$/.test(bkash) ||
+     !/^01[3-9]\d{8}$/.test(nagad)){
+    alert("সঠিক ১১ সংখ্যার বাংলাদেশি মোবাইল নম্বর দাও।");
+    return;
+  }
+
+  try{
+    await db.collection("paymentSettings").doc("main").set({
+      bkash:bkash,
+      nagad:nagad,
+      updatedAt:firebase.firestore.FieldValue.serverTimestamp()
+    });
+
+    document.getElementById("paymentMessage").innerText=
+      "✅ Payment Numbers Saved!";
+  }catch(error){
+    alert("Error: "+error.message);
+  }
+}
+
+async function loadPayment(){
+  try{
+    const doc=await db.collection("paymentSettings").doc("main").get();
+
+    if(doc.exists){
+      document.getElementById("bkash").value=doc.data().bkash || "";
+      document.getElementById("nagad").value=doc.data().nagad || "";
+    }
+  }catch(error){
+    document.getElementById("paymentMessage").innerText=error.message;
+  }
+}
+
+async function addPackage(){
+  const game=document.getElementById("game").value.trim();
+  const name=document.getElementById("packageName").value.trim();
+  const price=Number(document.getElementById("price").value);
+
+  if(!game || !name || !price || price<=0){
     alert("সব তথ্য সঠিকভাবে পূরণ করো!");
     return;
   }
@@ -148,14 +184,20 @@ async function addPackage(){
       createdAt:firebase.firestore.FieldValue.serverTimestamp()
     });
 
-    document.getElementById("packageMessage").innerText =
-      "✅ Package Added Successfully!";
+    document.getElementById("packageMessage").innerText="✅ Package Added!";
     document.getElementById("game").value="";
     document.getElementById("packageName").value="";
     document.getElementById("price").value="";
   }catch(error){
-    alert("Error: "+error.message);
+    alert(error.message);
   }
+}
+
+function escapeHTML(value){
+  return String(value ?? "").replace(/[&<>"']/g,char=>({
+    "&":"&amp;","<":"&lt;",">":"&gt;",
+    '"':"&quot;","'":"&#39;"
+  }[char]));
 }
 
 function loadPackages(){
@@ -164,21 +206,21 @@ function loadPackages(){
 
     snapshot.forEach(doc=>{
       const p=doc.data();
-      html+=`
-      <div class="item">
+      html+=`<div class="item">
         <b>${escapeHTML(p.game)}</b><br>
-        ${escapeHTML(p.name)} — ৳${Number(p.price)}<br>
+        ${escapeHTML(p.name)} — ৳${Number(p.price)}
         <button onclick="deletePackage('${doc.id}')">DELETE</button>
       </div>`;
     });
 
-    document.getElementById("packages").innerHTML =
-      html || "কোনো Package নেই।";
+    document.getElementById("packages").innerHTML=html || "কোনো Package নেই।";
+  },error=>{
+    document.getElementById("packages").innerText=error.message;
   });
 }
 
 async function deletePackage(id){
-  if(confirm("এই Package মুছে ফেলবে?")){
+  if(confirm("Package মুছে ফেলবে?")){
     await db.collection("packages").doc(id).delete();
   }
 }
@@ -189,35 +231,30 @@ function loadOrders(){
 
     snapshot.forEach(doc=>{
       const o=doc.data();
-      html+=`
-      <div class="item">
+      html+=`<div class="item">
         <b>Order ID:</b> ${escapeHTML(doc.id)}<br>
         <b>Game:</b> ${escapeHTML(o.game || "-")}<br>
         <b>Player ID:</b> ${escapeHTML(o.playerId || "-")}<br>
+        <b>Package:</b> ${escapeHTML(o.package || "-")}<br>
+        <b>Payment:</b> ${escapeHTML(o.payment || "-")}<br>
         <b>Status:</b> ${escapeHTML(o.status || "Pending")}<br>
-        <button onclick="completeOrder('${doc.id}')">
-          MARK COMPLETE
-        </button>
+        <button onclick="completeOrder('${doc.id}')">MARK COMPLETE</button>
       </div>`;
     });
 
-    document.getElementById("orders").innerHTML =
-      html || "এখনো কোনো Order নেই।";
+    document.getElementById("orders").innerHTML=html || "এখনো কোনো Order নেই।";
+  },error=>{
+    document.getElementById("orders").innerText=error.message;
   });
 }
 
 async function completeOrder(id){
-  await db.collection("orders").doc(id).update({
-    status:"Completed"
-  });
-  alert("Order Completed!");
-}
-
-function escapeHTML(value){
-  return String(value).replace(/[&<>"']/g,char=>({
-    "&":"&amp;","<":"&lt;",">":"&gt;",
-    '"':"&quot;","'":"&#39;"
-  }[char]));
+  try{
+    await db.collection("orders").doc(id).update({status:"Completed"});
+    alert("Order Completed!");
+  }catch(error){
+    alert(error.message);
+  }
 }
 </script>
 </body>
