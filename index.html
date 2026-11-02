@@ -4,149 +4,84 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>TOPUP BAZAAR BD</title>
-
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{background:#070b16;color:white;font-family:Arial,sans-serif}
-header{background:#10182a;padding:20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;border-bottom:2px solid #00d9ff}
-.logo{font-size:23px;color:#00e5ff;font-weight:bold}
-nav a{color:white;text-decoration:none;margin:10px}
-.hero{text-align:center;padding:65px 15px;background:linear-gradient(135deg,#10264b,#080d19)}
-.hero h1{font-size:36px;color:#00e5ff}
-.hero p{margin:15px;color:#ccc}
-.container{max-width:1100px;margin:auto;padding:35px 15px}
-.title{text-align:center;color:#00e5ff;margin-bottom:30px}
-.games{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px}
-.card{background:#121e35;border:1px solid #24466b;border-radius:15px;padding:25px;text-align:center;transition:.3s}
-.card:hover{transform:translateY(-7px);border-color:#00e5ff;box-shadow:0 0 18px #007caa55}
-.icon{font-size:48px}
-.card h3{margin:12px}
-.card p{color:#aaa}
-button{background:#00d9ff;border:none;padding:12px 20px;border-radius:8px;font-weight:bold;cursor:pointer}
-button:hover{background:white}
-.card button{margin-top:18px}
-.order{max-width:520px;margin:35px auto;background:#121e35;padding:25px;border-radius:15px;border:1px solid #24466b}
-input,select{width:100%;padding:14px;margin:9px 0;border-radius:7px;border:1px solid #345;background:#080f20;color:white}
-.order button{width:100%;margin-top:15px}
-.note{color:#ffc857;font-size:13px;margin-top:12px}
-footer{background:#10182a;padding:30px;text-align:center;color:#aaa}
-#message{text-align:center;margin-top:15px;color:#00e5ff}
+*{box-sizing:border-box}
+body{margin:0;background:#080d18;color:white;font-family:Arial,sans-serif}
+header{text-align:center;padding:25px;background:#101c32;border-bottom:2px solid #00c8ff}
+header h1{color:#00c8ff;margin:0}
+header p{color:#bbb}
+main{max-width:650px;margin:25px auto;padding:15px}
+.box{background:#111c30;padding:20px;border-radius:14px;margin-bottom:18px}
+h2{color:#00c8ff}
+button,.btn{background:#00aaff;color:#00101a;border:0;padding:12px 18px;border-radius:8px;font-weight:bold;cursor:pointer;margin:5px}
+button:hover{background:#55d5ff}
+input,select{width:100%;padding:13px;margin:8px 0 15px;border-radius:8px;border:1px solid #345;background:#091323;color:white}
+.package{background:#1b2b43;padding:14px;border-radius:9px;margin:9px 0;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.package button{margin:0}
+.small{color:#aab8cc;font-size:14px}
+#status{color:#ffd166}
+#paymentInfo{background:#091323;padding:12px;border-radius:8px;line-height:1.8}
 </style>
 </head>
-
 <body>
 
 <header>
-<div class="logo">🎮 TOPUP BAZAAR BD</div>
-<nav>
-<a href="#">Home</a>
-<a href="#games">Games</a>
-<a href="#order">Order</a>
-</nav>
+<h1>⚡ TOPUP BAZAAR BD</h1>
+<p>Your Trusted Gaming Top-Up Store</p>
 </header>
 
-<section class="hero">
-<h1>WELCOME GAMERS 🔥</h1>
-<p>Your Ultimate Gaming Top-Up Marketplace</p>
-<button onclick="document.getElementById('games').scrollIntoView({behavior:'smooth'})">
-SHOP NOW
-</button>
-</section>
-
-<section class="container" id="games">
-<h2 class="title">🔥 SELECT YOUR GAME</h2>
-
-<div class="games">
-
-<div class="card">
-<div class="icon">🔥</div>
-<h3>Free Fire</h3>
-<p>Diamond Packages</p>
-<button onclick="choose('Free Fire')">BUY NOW</button>
+<main>
+<div class="box">
+<h2>🎮 Select Game</h2>
+<div id="games">
+<button onclick="choose('Free Fire')">Free Fire</button>
+<button onclick="choose('PUBG Mobile')">PUBG Mobile</button>
+<button onclick="choose('FC Mobile')">FC Mobile</button>
+<button onclick="choose('eFootball')">eFootball</button>
+<button onclick="choose('Mobile Legends')">Mobile Legends</button>
+<button onclick="choose('Roblox')">Roblox</button>
+</div>
 </div>
 
-<div class="card">
-<div class="icon">🔫</div>
-<h3>PUBG Mobile</h3>
-<p>UC Packages</p>
-<button onclick="choose('PUBG Mobile')">BUY NOW</button>
+<div class="box">
+<h2>💎 Available Packages</h2>
+<p id="selectedGame" class="small">প্রথমে একটি Game নির্বাচন করো।</p>
+<div id="packages">Package লোড হচ্ছে...</div>
+<p id="status"></p>
 </div>
 
-<div class="card">
-<div class="icon">⚽</div>
-<h3>FC Mobile</h3>
-<p>FC Points</p>
-<button onclick="choose('FC Mobile')">BUY NOW</button>
-</div>
+<div class="box">
+<h2>🛒 Place Your Order</h2>
 
-<div class="card">
-<div class="icon">🎯</div>
-<h3>eFootball</h3>
-<p>Coins Packages</p>
-<button onclick="choose('eFootball')">BUY NOW</button>
-</div>
+<label>Selected Package</label>
+<input id="selectedPackage" readonly placeholder="একটি Package নির্বাচন করো">
 
-<div class="card">
-<div class="icon">🏆</div>
-<h3>Mobile Legends</h3>
-<p>Diamonds</p>
-<button onclick="choose('Mobile Legends')">BUY NOW</button>
-</div>
+<label>Player ID</label>
+<input id="playerId" placeholder="তোমার Game Player ID লিখো">
 
-<div class="card">
-<div class="icon">🎮</div>
-<h3>Roblox</h3>
-<p>Robux Packages</p>
-<button onclick="choose('Roblox')">BUY NOW</button>
-</div>
-
-</div>
-
-<div class="order" id="order">
-<h2 class="title">🛒 PLACE YOUR ORDER</h2>
-
-<form id="orderForm" onsubmit="sendOrder(event)">
-
-<input id="game" placeholder="Selected Game" readonly required>
-
-<input id="uid" placeholder="Player ID / UID" required>
-
-<select id="pack" required>
-<option value="">Loading Packages...</option>
+<label>Payment Method</label>
+<select id="payment" onchange="showPayment()">
+<option value="">Payment নির্বাচন করো</option>
+<option value="bKash">bKash</option>
+<option value="Nagad">Nagad</option>
 </select>
 
-<select id="payment" required>
-<option value="">Payment Method</option>
-<option>bKash</option>
-<option>Nagad</option>
-<option>Rocket</option>
-</select>
+<div id="paymentInfo">Payment Method নির্বাচন করো।</div>
 
-<button type="submit" id="orderButton">CONFIRM ORDER</button>
+<label>Transaction ID (TrxID)</label>
+<input id="trxId" placeholder="পেমেন্ট করার পর TrxID লিখো">
 
-</form>
-
-<p id="message"></p>
-
-<p class="note">
-অর্ডার জমা দেওয়ার পর Admin-এর সঙ্গে পেমেন্ট নিশ্চিত করুন।
-এটি এখনো Manual Payment System।
-</p>
+<button onclick="sendOrder()">✅ Submit Order</button>
+<p id="result"></p>
 </div>
-</section>
-
-<footer>
-<h3>🎮 TOPUP BAZAAR BD</h3>
-<p>Your Trusted Gaming Store</p>
-<p>© 2026 All Rights Reserved</p>
-</footer>
+</main>
 
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 
 <script>
 const firebaseConfig = {
-  apiKey: "AIzaSyDwXSVZLSxEVtNhePV3xGO42DXqolJNNUE",
+  apiKey: "AIzaSyDwXSVZLSxEVtNhePV3XGO42DXqolJNNUE",
   authDomain: "topup-bazaar-bd.firebaseapp.com",
   projectId: "topup-bazaar-bd",
   storageBucket: "topup-bazaar-bd.firebasestorage.app",
@@ -158,90 +93,133 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
 let allPackages = [];
+let currentGame = "";
+let selected = null;
+let paymentSettings = {};
 
 db.collection("packages").onSnapshot(snapshot => {
-  allPackages = [];
-  snapshot.forEach(doc => {
-    allPackages.push({id:doc.id,...doc.data()});
-  });
-
-  updatePackages();
+  allPackages = snapshot.docs.map(doc => ({
+    id: doc.id,
+    ...doc.data()
+  }));
+  showPackages();
 }, error => {
-  document.getElementById("message").innerText =
-    "Package load error: " + error.message;
+  document.getElementById("packages").innerText =
+    "Package লোড হয়নি: " + error.message;
 });
 
-function choose(name){
-  document.getElementById("game").value = name;
-  updatePackages();
-  document.getElementById("order").scrollIntoView({behavior:"smooth"});
+db.collection("paymentSettings").doc("main").get()
+.then(doc => {
+  if(doc.exists) paymentSettings = doc.data();
+  showPayment();
+})
+.catch(error => {
+  document.getElementById("paymentInfo").innerText =
+    "Payment তথ্য লোড হয়নি: " + error.message;
+});
+
+function choose(game){
+  currentGame = game;
+  selected = null;
+  document.getElementById("selectedPackage").value = "";
+  document.getElementById("selectedGame").innerText = "Selected Game: " + game;
+  showPackages();
 }
 
-function updatePackages(){
-  const game = document.getElementById("game").value;
-  const select = document.getElementById("pack");
+function showPackages(){
+  const area = document.getElementById("packages");
 
-  select.innerHTML = '<option value="">Select Package</option>';
-
-  const filtered = allPackages.filter(p => p.game === game);
-
-  filtered.forEach(p => {
-    const option = document.createElement("option");
-    option.value = p.id;
-    option.textContent = p.name + " - ৳" + p.price;
-    select.appendChild(option);
-  });
-
-  if(game && filtered.length === 0){
-    select.innerHTML = '<option value="">এই গেমের Package নেই</option>';
-  }
-}
-
-async function sendOrder(e){
-  e.preventDefault();
-
-  const game = document.getElementById("game").value;
-  const uid = document.getElementById("uid").value.trim();
-  const packId = document.getElementById("pack").value;
-  const payment = document.getElementById("payment").value;
-
-  const selectedPackage = allPackages.find(p => p.id === packId);
-
-  if(!game || !uid || !selectedPackage || !payment){
-    alert("সব তথ্য সঠিকভাবে পূরণ করো!");
+  if(!currentGame){
+    area.innerText = "প্রথমে একটি Game নির্বাচন করো।";
     return;
   }
 
-  const button = document.getElementById("orderButton");
-  const message = document.getElementById("message");
+  const list = allPackages.filter(p => p.game === currentGame);
 
-  button.disabled = true;
-  button.textContent = "Submitting...";
-  message.textContent = "অর্ডার জমা হচ্ছে...";
+  if(list.length === 0){
+    area.innerText = "এই Game-এর কোনো Package পাওয়া যায়নি।";
+    return;
+  }
+
+  area.innerHTML = "";
+
+  list.forEach(p => {
+    const row = document.createElement("div");
+    row.className = "package";
+
+    const info = document.createElement("span");
+    info.textContent = p.name + " — ৳" + p.price;
+
+    const btn = document.createElement("button");
+    btn.textContent = "Select";
+    btn.onclick = () => {
+      selected = p;
+      document.getElementById("selectedPackage").value =
+        p.name + " — ৳" + p.price;
+    };
+
+    row.appendChild(info);
+    row.appendChild(btn);
+    area.appendChild(row);
+  });
+}
+
+function showPayment(){
+  const method = document.getElementById("payment").value;
+  const info = document.getElementById("paymentInfo");
+
+  if(!method){
+    info.innerText = "Payment Method নির্বাচন করো।";
+    return;
+  }
+
+  const number = method === "bKash"
+    ? paymentSettings.bkash
+    : paymentSettings.nagad;
+
+  if(!number){
+    info.innerText = method + " নম্বর এখনো Admin সেট করেনি।";
+    return;
+  }
+
+  info.innerHTML =
+    "<b>" + method + " Personal/Business Number:</b><br>" +
+    "<span style='color:#00c8ff;font-size:22px'>" + number + "</span><br>" +
+    "পেমেন্ট করার পর Transaction ID লিখে Order Submit করো।";
+}
+
+async function sendOrder(){
+  const playerId = document.getElementById("playerId").value.trim();
+  const payment = document.getElementById("payment").value;
+  const trxId = document.getElementById("trxId").value.trim();
+  const result = document.getElementById("result");
+
+  if(!selected) return alert("আগে একটি Package নির্বাচন করো।");
+  if(!playerId) return alert("Player ID লিখো।");
+  if(!payment) return alert("Payment Method নির্বাচন করো।");
+  if(!trxId) return alert("Transaction ID লিখো।");
+
+  result.innerText = "Order জমা হচ্ছে...";
 
   try{
-    const orderRef = await db.collection("orders").add({
-      game: game,
-      playerId: uid,
-      package: selectedPackage.name,
-      packagePrice: Number(selectedPackage.price),
+    await db.collection("orders").add({
+      game: currentGame,
+      playerId: playerId,
+      package: selected.name,
+      packagePrice: Number(selected.price),
       payment: payment,
+      transactionId: trxId,
       status: "Pending",
       createdAt: firebase.firestore.FieldValue.serverTimestamp()
     });
 
-    message.textContent = "✅ অর্ডার সফলভাবে জমা হয়েছে! Order ID: " + orderRef.id;
-    document.getElementById("orderForm").reset();
-    updatePackages();
-
+    result.innerText = "✅ Order সফলভাবে জমা হয়েছে!";
+    document.getElementById("playerId").value = "";
+    document.getElementById("trxId").value = "";
   }catch(error){
-    message.textContent = "অর্ডার জমা হয়নি: " + error.message;
+    result.innerText = "Order জমা হয়নি: " + error.message;
   }
-
-  button.disabled = false;
-  button.textContent = "CONFIRM ORDER";
 }
 </script>
-
 </body>
 </html>
