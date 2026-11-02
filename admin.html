@@ -1,107 +1,224 @@
-```html
 <!DOCTYPE html>
 <html lang="bn">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin - TOPUP BAZAAR BD</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TOPUP BAZAAR BD - Admin</title>
+
 <style>
 *{box-sizing:border-box}
 body{
-margin:0;
-background:#080d19;
-color:white;
-font-family:Arial,sans-serif;
+  margin:0;background:#080d18;color:white;
+  font-family:Arial,sans-serif;padding:20px
 }
-header{
-background:#111d34;
-padding:20px;
-text-align:center;
-color:#00e5ff;
-font-size:24px;
-font-weight:bold;
-}
+.container{max-width:850px;margin:30px auto}
 .box{
-max-width:450px;
-margin:50px auto;
-padding:25px;
-background:#14213a;
-border-radius:15px;
+  background:#111c30;padding:25px;border-radius:15px;
+  border:1px solid #174b75;margin-bottom:20px
 }
-h2{text-align:center;color:#00e5ff}
-input{
-width:100%;
-padding:14px;
-margin:10px 0;
-background:#081426;
-border:1px solid #345;
-color:white;
-border-radius:7px;
+h1,h2{color:#00c8ff}
+input,button{
+  width:100%;padding:13px;margin:8px 0;
+  border-radius:8px;border:0;font-size:15px
 }
+input{background:#eaf4ff;color:#111}
 button{
-width:100%;
-padding:13px;
-background:#00d9ff;
-border:0;
-border-radius:7px;
-font-weight:bold;
-cursor:pointer;
+  background:#00bfff;color:#00111c;
+  font-weight:bold;cursor:pointer
 }
-#dashboard{display:none}
-.card{
-background:#1b2b49;
-padding:20px;
-margin:15px 0;
-border-radius:10px;
+.logout{background:#ff4055;color:white}
+.item{
+  background:#192943;padding:15px;
+  margin:10px 0;border-radius:9px
 }
+.hidden{display:none}
+.small{color:#a9bdd5;font-size:13px}
 </style>
 </head>
+
 <body>
+<div class="container">
 
-<header>👑 TOPUP BAZAAR BD ADMIN</header>
+<h1>🎮 TOPUP BAZAAR BD</h1>
+<p class="small">Admin Control Panel</p>
 
-<div class="box" id="login">
+<div class="box" id="loginBox">
 <h2>Admin Login</h2>
-<input type="email" id="email" placeholder="Admin Email">
-<input type="password" id="password" placeholder="Password">
+<input id="email" type="email" placeholder="Admin Email">
+<input id="password" type="password" placeholder="Password">
 <button onclick="login()">LOGIN</button>
-<p id="msg"></p>
+<p id="message"></p>
 </div>
 
-<div class="box" id="dashboard">
-<h2>Welcome Admin!</h2>
+<div id="dashboard" class="hidden">
 
-<div class="card">
-<h3>📦 Order Management</h3>
-<p>Orders: Firebase connection pending</p>
+<div class="box">
+<h2>Welcome Admin 👑</h2>
+<button class="logout" onclick="logout()">LOGOUT</button>
 </div>
 
-<div class="card">
-<h3>💎 Package Management</h3>
-<p>Package editing: Firebase connection pending</p>
+<div class="box">
+<h2>➕ Add New Package</h2>
+<input id="game" placeholder="Game Name">
+<input id="packageName" placeholder="Package Name">
+<input id="price" type="number" placeholder="Price (BDT)">
+<button onclick="addPackage()">ADD PACKAGE</button>
+<p id="packageMessage"></p>
 </div>
 
-<div class="card">
-<h3>💰 Sales Report</h3>
-<p>Sales: Firebase connection pending</p>
+<div class="box">
+<h2>📦 All Packages</h2>
+<div id="packages">Loading...</div>
 </div>
 
-<button onclick="logout()">LOGOUT</button>
+<div class="box">
+<h2>🛒 Customer Orders</h2>
+<div id="orders">Loading...</div>
 </div>
+
+</div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 
 <script>
+const firebaseConfig = {
+  apiKey: "AIzaSyDwXSVZLSxEVtNhePV3xGO42DXqolJNNUE",
+  authDomain: "topup-bazaar-bd.firebaseapp.com",
+  projectId: "topup-bazaar-bd",
+  storageBucket: "topup-bazaar-bd.firebasestorage.app",
+  messagingSenderId: "5988939552",
+  appId: "1:5988939552:web:3182e2466ace850f004945"
+};
+
+firebase.initializeApp(firebaseConfig);
+
+const auth = firebase.auth();
+const db = firebase.firestore();
+
+const ADMIN_UID = "YsT6eOaoFjbFqMraxraLuLtK64n2";
+
 function login(){
-document.getElementById('msg').innerText=
-"Firebase connection এখনো সেটআপ করা হয়নি।";
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value;
+
+  document.getElementById("message").innerText = "লগইন হচ্ছে...";
+
+  auth.signInWithEmailAndPassword(email,password)
+  .catch(error=>{
+    document.getElementById("message").innerText =
+      "Login Error: " + error.message;
+  });
 }
 
 function logout(){
-document.getElementById('dashboard').style.display='none';
-document.getElementById('login').style.display='block';
+  auth.signOut();
+}
+
+auth.onAuthStateChanged(user=>{
+  if(user && user.uid === ADMIN_UID){
+    document.getElementById("loginBox").classList.add("hidden");
+    document.getElementById("dashboard").classList.remove("hidden");
+    loadPackages();
+    loadOrders();
+  }else{
+    if(user) auth.signOut();
+    document.getElementById("loginBox").classList.remove("hidden");
+    document.getElementById("dashboard").classList.add("hidden");
+  }
+});
+
+async function addPackage(){
+  const game = document.getElementById("game").value.trim();
+  const name = document.getElementById("packageName").value.trim();
+  const price = Number(document.getElementById("price").value);
+
+  if(!game || !name || !price || price <= 0){
+    alert("সব তথ্য সঠিকভাবে পূরণ করো!");
+    return;
+  }
+
+  try{
+    await db.collection("packages").add({
+      game:game,
+      name:name,
+      price:price,
+      createdAt:firebase.firestore.FieldValue.serverTimestamp()
+    });
+
+    document.getElementById("packageMessage").innerText =
+      "✅ Package Added Successfully!";
+    document.getElementById("game").value="";
+    document.getElementById("packageName").value="";
+    document.getElementById("price").value="";
+  }catch(error){
+    alert("Error: "+error.message);
+  }
+}
+
+function loadPackages(){
+  db.collection("packages").onSnapshot(snapshot=>{
+    let html="";
+
+    snapshot.forEach(doc=>{
+      const p=doc.data();
+      html+=`
+      <div class="item">
+        <b>${escapeHTML(p.game)}</b><br>
+        ${escapeHTML(p.name)} — ৳${Number(p.price)}<br>
+        <button onclick="deletePackage('${doc.id}')">DELETE</button>
+      </div>`;
+    });
+
+    document.getElementById("packages").innerHTML =
+      html || "কোনো Package নেই।";
+  });
+}
+
+async function deletePackage(id){
+  if(confirm("এই Package মুছে ফেলবে?")){
+    await db.collection("packages").doc(id).delete();
+  }
+}
+
+function loadOrders(){
+  db.collection("orders").onSnapshot(snapshot=>{
+    let html="";
+
+    snapshot.forEach(doc=>{
+      const o=doc.data();
+      html+=`
+      <div class="item">
+        <b>Order ID:</b> ${escapeHTML(doc.id)}<br>
+        <b>Game:</b> ${escapeHTML(o.game || "-")}<br>
+        <b>Player ID:</b> ${escapeHTML(o.playerId || "-")}<br>
+        <b>Status:</b> ${escapeHTML(o.status || "Pending")}<br>
+        <button onclick="completeOrder('${doc.id}')">
+          MARK COMPLETE
+        </button>
+      </div>`;
+    });
+
+    document.getElementById("orders").innerHTML =
+      html || "এখনো কোনো Order নেই।";
+  });
+}
+
+async function completeOrder(id){
+  await db.collection("orders").doc(id).update({
+    status:"Completed"
+  });
+  alert("Order Completed!");
+}
+
+function escapeHTML(value){
+  return String(value).replace(/[&<>"']/g,char=>({
+    "&":"&amp;","<":"&lt;",">":"&gt;",
+    '"':"&quot;","'":"&#39;"
+  }[char]));
 }
 </script>
-
 </body>
 </html>
-```
-
