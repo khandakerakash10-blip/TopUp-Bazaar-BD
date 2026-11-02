@@ -1,120 +1,84 @@
-```html
 <!DOCTYPE html>
 <html lang="bn">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>TOPUP BAZAAR BD | Admin</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TOPUP BAZAAR BD - Admin</title>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 
 <style>
 *{box-sizing:border-box}
 body{
- margin:0;background:#080812;color:white;
- font-family:Arial,sans-serif;padding:18px
+ margin:0;padding:20px;
+ background:#080d1b;color:white;
+ font-family:Arial,sans-serif;
 }
-.container{max-width:1100px;margin:auto}
-h1,h2{color:#00c8ff}
+.container{max-width:950px;margin:auto}
+h1{color:#36a8ff;text-align:center}
 .box{
- background:#121426;padding:22px;border-radius:15px;
- border:1px solid #343456;margin:20px 0
+ background:#111b30;padding:20px;
+ border-radius:15px;margin:15px 0;
+ border:1px solid #263b60;
 }
-input,select{
- width:100%;padding:13px;margin:8px 0 15px;
- background:#090b19;color:white;
- border:1px solid #383853;border-radius:8px
+input,select,button{
+ width:100%;padding:13px;margin:7px 0;
+ border-radius:8px;border:0;font-size:15px;
 }
+input,select{background:#eaf2ff;color:#111}
 button{
- padding:11px 15px;border:0;border-radius:8px;
- background:linear-gradient(90deg,#00c8ff,#9b5cff);
- color:#080812;font-weight:bold;cursor:pointer;margin:4px
+ background:linear-gradient(90deg,#087cff,#873cff);
+ color:white;font-weight:bold;cursor:pointer;
 }
-.logout{background:#ff4055;color:white}
-.item{
- background:#1a1b32;padding:17px;
- border-radius:11px;margin:12px 0;
- border:1px solid #343456;overflow-wrap:anywhere
+.red{background:#d83248}
+.green{background:#079c69}
+.order{
+ background:#1b2943;padding:15px;
+ border-radius:10px;margin:10px 0;
+ overflow-wrap:anywhere;
 }
-.stats{
- display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
- gap:12px
-}
-.stat{
- background:#191a32;padding:18px;border-radius:12px;
- border:1px solid #343456
-}
-.stat h3{color:#00c8ff;font-size:25px}
-.small{color:#a8acc4;font-size:13px}
-.hidden{display:none}
-.green{color:#00e5a0}
-.yellow{color:#ffd166}
-.red{color:#ff6677}
+.small{color:#a9c6e8;font-size:13px}
+#dashboard{display:none}
 </style>
 </head>
 
 <body>
 <div class="container">
 
-<h1>⚡ TOPUP BAZAAR BD</h1>
-<p class="small">Premium Admin Control Panel</p>
+<h1>TOPUP BAZAAR BD</h1>
+<h2 style="text-align:center">ADMIN PANEL</h2>
 
 <div class="box" id="loginBox">
-<h2>👑 Admin Login</h2>
+<h3>Admin Login</h3>
 <input id="email" type="email" placeholder="Admin Email">
 <input id="password" type="password" placeholder="Password">
 <button onclick="login()">LOGIN</button>
-<p id="message"></p>
+<p id="loginError" style="color:#ff7777"></p>
 </div>
 
-<div id="dashboard" class="hidden">
+<div id="dashboard">
 
 <div class="box">
-<h2>Welcome Admin 👑</h2>
-<button class="logout" onclick="logout()">LOGOUT</button>
-</div>
-
-<div class="stats">
-<div class="stat">
-<p>Total Orders</p>
-<h3 id="totalOrders">0</h3>
-</div>
-<div class="stat">
-<p>Pending Orders</p>
-<h3 id="pendingOrders">0</h3>
-</div>
-<div class="stat">
-<p>Verified Payments</p>
-<h3 id="paidOrders">0</h3>
-</div>
-<div class="stat">
-<p>Completed Orders</p>
-<h3 id="completedOrders">0</h3>
-</div>
-<div class="stat">
-<p>Verified Sales</p>
-<h3 id="totalSales">৳0</h3>
-</div>
+<h3>Dashboard</h3>
+<p>Total Orders: <b id="total">0</b></p>
+<p>Pending Orders: <b id="pending">0</b></p>
+<p>Completed Orders: <b id="completed">0</b></p>
+<button class="red" onclick="logout()">LOGOUT</button>
 </div>
 
 <div class="box">
-<h2>💳 Payment Settings</h2>
-<p class="small">বাবার সম্মতি ও অনুমোদিত অ্যাকাউন্ট ব্যবহার করবে।</p>
-
-<label>bKash Number</label>
-<input id="bkash" placeholder="bKash Number">
-
-<label>Nagad Number</label>
-<input id="nagad" placeholder="Nagad Number">
-
+<h3>Payment Settings</h3>
+<input id="bkash" placeholder="bKash Merchant Number">
+<input id="nagad" placeholder="Nagad Merchant Number">
 <button onclick="savePayment()">SAVE PAYMENT SETTINGS</button>
-<p id="paymentMessage"></p>
 </div>
 
 <div class="box">
-<h2>➕ Add New Package</h2>
+<h3>Add New Package</h3>
 
-<label>Game Name</label>
 <select id="game">
-<option value="">Select Game</option>
 <option>Free Fire</option>
 <option>PUBG Mobile</option>
 <option>FC Mobile</option>
@@ -123,291 +87,201 @@ button{
 <option>Roblox</option>
 </select>
 
-<label>Package Name</label>
-<input id="packageName" placeholder="Example: 100 Diamonds">
-
-<label>Price (BDT)</label>
-<input id="price" type="number" min="1" placeholder="Price">
+<input id="packageName" placeholder="Package Name">
+<input id="price" type="number" placeholder="Price (৳)">
 
 <button onclick="addPackage()">ADD PACKAGE</button>
-<p id="packageMessage"></p>
 </div>
 
 <div class="box">
-<h2>📦 All Packages</h2>
-<div id="packages">Loading...</div>
-</div>
-
-<div class="box">
-<h2>🛒 Customer Orders</h2>
-<p class="small">
-প্রথমে Merchant Account-এ Payment যাচাই করবে।
-তারপর Payment Verified করবে। Diamond পাঠানোর পর Completed করবে।
-</p>
+<h3>Orders</h3>
 <div id="orders">Loading...</div>
 </div>
 
-</div>
+<div class="box">
+<h3>Packages</h3>
+<div id="packages">Loading...</div>
 </div>
 
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+</div>
+</div>
 
 <script>
+// IMPORTANT: Firebase Console থেকে সঠিক API Key বসাও।
 const firebaseConfig = {
-apiKey:"AIzaSyDwXSVZLSxEVtNhePV3XGO42DXqolJNNUE",
-authDomain:"topup-bazaar-bd.firebaseapp.com",
-projectId:"topup-bazaar-bd",
-storageBucket:"topup-bazaar-bd.firebasestorage.app",
-messagingSenderId:"5988939552",
-appId:"1:5988939552:web:3182e2466ace850f004945"
+  apiKey: "এখানে_তোমার_সঠিক_FIREBASE_API_KEY",
+  authDomain: "topup-bazaar-bd.firebaseapp.com",
+  projectId: "topup-bazaar-bd",
+  storageBucket: "topup-bazaar-bd.firebasestorage.app",
+  messagingSenderId: "5988939552",
+  appId: "1:5988939552:web:3182e2466ace850f004945"
 };
+
+const ADMIN_UID = "YsT6eOaoFjbFqMraxraLuLtK64n2";
 
 firebase.initializeApp(firebaseConfig);
 
-const auth=firebase.auth();
-const db=firebase.firestore();
-
-const ADMIN_UID="YsT6eOaoFjbFqMraxraLuLtK64n2";
-
-function el(id){
-return document.getElementById(id);
-}
-
-function escapeHTML(value){
-return String(value??"").replace(/[&<>"']/g,char=>({
-"&":"&amp;","<":"&lt;",">":"&gt;",
-'"':"&quot;","'":"&#39;"
-}[char]));
-}
+const auth = firebase.auth();
+const db = firebase.firestore();
 
 function login(){
-const email=el("email").value.trim();
-const password=el("password").value;
+ const email=document.getElementById("email").value.trim();
+ const password=document.getElementById("password").value;
 
-el("message").textContent="লগইন হচ্ছে...";
+ document.getElementById("loginError").innerText="";
 
-auth.signInWithEmailAndPassword(email,password)
-.catch(error=>{
-el("message").textContent=error.message;
-});
-}
-
-function logout(){
-auth.signOut();
+ auth.signInWithEmailAndPassword(email,password)
+ .catch(error=>{
+   document.getElementById("loginError").innerText=error.message;
+ });
 }
 
 auth.onAuthStateChanged(user=>{
-if(user && user.uid===ADMIN_UID){
-el("loginBox").classList.add("hidden");
-el("dashboard").classList.remove("hidden");
-loadPayment();
-loadPackages();
-loadOrders();
-}else{
-if(user)auth.signOut();
-el("loginBox").classList.remove("hidden");
-el("dashboard").classList.add("hidden");
-}
+ if(user){
+   if(user.uid===ADMIN_UID){
+     document.getElementById("loginBox").style.display="none";
+     document.getElementById("dashboard").style.display="block";
+     loadOrders();
+     loadPackages();
+     loadPayment();
+   }else{
+     alert("এই অ্যাকাউন্ট Admin নয়!");
+     auth.signOut();
+   }
+ }else{
+   document.getElementById("loginBox").style.display="block";
+   document.getElementById("dashboard").style.display="none";
+ }
 });
 
-async function savePayment(){
-const bkash=el("bkash").value.trim();
-const nagad=el("nagad").value.trim();
-
-if(!/^01[3-9]\d{8}$/.test(bkash) ||
-!/^01[3-9]\d{8}$/.test(nagad)){
-alert("সঠিক ১১ সংখ্যার নম্বর লিখো।");
-return;
+function logout(){
+ auth.signOut();
 }
 
-try{
-await db.collection("paymentSettings").doc("main").set({
-bkash,nagad,
-updatedAt:firebase.firestore.FieldValue.serverTimestamp()
-});
-
-el("paymentMessage").textContent="✅ Settings Saved!";
-}catch(error){
-el("paymentMessage").textContent=error.message;
-}
+function savePayment(){
+ db.collection("paymentSettings").doc("main").set({
+   bkash:document.getElementById("bkash").value.trim(),
+   nagad:document.getElementById("nagad").value.trim()
+ },{merge:true})
+ .then(()=>alert("Payment settings saved!"))
+ .catch(e=>alert(e.message));
 }
 
-async function loadPayment(){
-try{
-const doc=await db.collection("paymentSettings").doc("main").get();
-if(doc.exists){
-el("bkash").value=doc.data().bkash||"";
-el("nagad").value=doc.data().nagad||"";
-}
-}catch(error){
-el("paymentMessage").textContent=error.message;
-}
-}
-
-async function addPackage(){
-const game=el("game").value;
-const name=el("packageName").value.trim();
-const price=Number(el("price").value);
-
-if(!game||!name||!Number.isFinite(price)||price<=0){
-alert("সব তথ্য সঠিকভাবে পূরণ করো।");
-return;
+function loadPayment(){
+ db.collection("paymentSettings").doc("main").get()
+ .then(doc=>{
+   if(doc.exists){
+     const d=doc.data();
+     document.getElementById("bkash").value=d.bkash||"";
+     document.getElementById("nagad").value=d.nagad||"";
+   }
+ });
 }
 
-try{
-await db.collection("packages").add({
-game,name,price,
-createdAt:firebase.firestore.FieldValue.serverTimestamp()
-});
+function addPackage(){
+ const game=document.getElementById("game").value;
+ const name=document.getElementById("packageName").value.trim();
+ const price=Number(document.getElementById("price").value);
 
-el("packageMessage").textContent="✅ Package Added!";
-el("packageName").value="";
-el("price").value="";
-}catch(error){
-el("packageMessage").textContent=error.message;
-}
+ if(!name || !price || price<=0){
+   alert("Package name ও সঠিক price দাও");
+   return;
+ }
+
+ db.collection("packages").add({
+   game:game,
+   package:name,
+   price:price,
+   createdAt:firebase.firestore.FieldValue.serverTimestamp()
+ })
+ .then(()=>{
+   alert("Package added!");
+   document.getElementById("packageName").value="";
+   document.getElementById("price").value="";
+   loadPackages();
+ })
+ .catch(e=>alert(e.message));
 }
 
 function loadPackages(){
-db.collection("packages").onSnapshot(snapshot=>{
-let html="";
-
-snapshot.forEach(doc=>{
-const p=doc.data();
-
-html+=`
-<div class="item">
-<b>${escapeHTML(p.game)}</b><br>
-${escapeHTML(p.name)} — ৳${Number(p.price)||0}
-<br>
-<button onclick="deletePackage('${doc.id}')">DELETE</button>
-</div>`;
-});
-
-el("packages").innerHTML=html||"কোনো Package নেই।";
-},error=>{
-el("packages").textContent=error.message;
-});
+ db.collection("packages").onSnapshot(snapshot=>{
+   let html="";
+   snapshot.forEach(doc=>{
+     const d=doc.data();
+     html+=`
+     <div class="order">
+       <b>${d.game||""}</b><br>
+       ${d.package||d.name||""} — ৳${d.price||""}
+       <button class="red" onclick="deletePackage('${doc.id}')">
+       DELETE
+       </button>
+     </div>`;
+   });
+   document.getElementById("packages").innerHTML=html||"No packages";
+ });
 }
 
-async function deletePackage(id){
-if(!confirm("এই Package মুছে ফেলবে?"))return;
-
-try{
-await db.collection("packages").doc(id).delete();
-}catch(error){
-alert(error.message);
-}
+function deletePackage(id){
+ if(confirm("এই package delete করবে?")){
+   db.collection("packages").doc(id).delete()
+   .catch(e=>alert(e.message));
+ }
 }
 
 function loadOrders(){
-db.collection("orders").onSnapshot(snapshot=>{
-let html="";
-let total=0,pending=0,paid=0,completed=0,sales=0;
+ db.collection("orders").orderBy("createdAt","desc")
+ .onSnapshot(snapshot=>{
+   let html="";
+   let pending=0,completed=0;
 
-snapshot.forEach(doc=>{
-const o=doc.data();
-const status=o.status||"Pending";
+   document.getElementById("total").innerText=snapshot.size;
 
-total++;
+   snapshot.forEach(doc=>{
+     const d=doc.data();
+     const status=d.status||"Pending";
 
-if(status==="Pending")pending++;
-if(status==="Payment Verified"||status==="Completed"){
-paid++;
-sales+=Number(o.packagePrice)||0;
-}
-if(status==="Completed")completed++;
+     if(status==="Pending") pending++;
+     if(status==="Completed") completed++;
 
-html+=`
-<div class="item">
-<b>Order ID:</b><br>${escapeHTML(doc.id)}<br><br>
+     html+=`
+     <div class="order">
+       <b>${d.game||""}</b><br>
+       Player ID: ${d.playerId||""}<br>
+       Package: ${d.package||""}<br>
+       Price: ৳${d.packagePrice||""}<br>
+       Payment: ${d.payment||""}<br>
+       TrxID: ${d.transactionId||""}<br>
+       Status: <b>${status}</b>
 
-<b>Game:</b> ${escapeHTML(o.game||"-")}<br>
-<b>Player ID:</b> ${escapeHTML(o.playerId||"-")}<br>
-<b>Package:</b> ${escapeHTML(o.package||"-")}<br>
-<b>Price:</b> ৳${Number(o.packagePrice)||0}<br>
-<b>Payment:</b> ${escapeHTML(o.payment||"-")}<br>
-<b>TrxID:</b> ${escapeHTML(o.transactionId||"-")}<br>
-<b>Status:</b> <span class="yellow">${escapeHTML(status)}</span><br><br>
+       <button class="green" onclick="updateOrder('${doc.id}','Payment Verified')">
+       PAYMENT VERIFIED
+       </button>
 
-<button onclick="verifyPayment('${doc.id}')">
-PAYMENT VERIFIED
-</button>
+       <button onclick="updateOrder('${doc.id}','Completed')">
+       DELIVERY COMPLETED
+       </button>
 
-<button onclick="completeOrder('${doc.id}')">
-DELIVERY COMPLETED
-</button>
+       <button class="red" onclick="updateOrder('${doc.id}','Cancelled')">
+       CANCEL ORDER
+       </button>
+     </div>`;
+   });
 
-<button onclick="cancelOrder('${doc.id}')"
-style="background:#ff4055;color:white">
-CANCEL ORDER
-</button>
-</div>`;
-});
-
-el("orders").innerHTML=html||"এখনো কোনো Order নেই।";
-
-el("totalOrders").textContent=total;
-el("pendingOrders").textContent=pending;
-el("paidOrders").textContent=paid;
-el("completedOrders").textContent=completed;
-el("totalSales").textContent="৳"+sales;
-
-},error=>{
-el("orders").textContent=error.message;
-});
+   document.getElementById("pending").innerText=pending;
+   document.getElementById("completed").innerText=completed;
+   document.getElementById("orders").innerHTML=html||"No orders";
+ });
 }
 
-async function verifyPayment(id){
-if(!confirm("Merchant Account-এ টাকা সত্যিই এসেছে এবং TrxID মিলেছে?"))return;
+function updateOrder(id,status){
+ if(!confirm("Order status পরিবর্তন করবে?")) return;
 
-try{
-await db.collection("orders").doc(id).update({
-status:"Payment Verified",
-verifiedAt:firebase.firestore.FieldValue.serverTimestamp()
-});
-alert("Payment Verified!");
-}catch(error){
-alert(error.message);
-}
-}
-
-async function completeOrder(id){
-const doc=await db.collection("orders").doc(id).get();
-
-if(!doc.exists)return alert("Order পাওয়া যায়নি।");
-
-if(doc.data().status!=="Payment Verified"){
-return alert("আগে Payment যাচাই করতে হবে!");
-}
-
-if(!confirm("Diamond/UC সত্যিই Player ID-তে পাঠানো হয়েছে?"))return;
-
-try{
-await db.collection("orders").doc(id).update({
-status:"Completed",
-completedAt:firebase.firestore.FieldValue.serverTimestamp()
-});
-alert("Order Completed!");
-}catch(error){
-alert(error.message);
-}
-}
-
-async function cancelOrder(id){
-if(!confirm("Order Cancel করবে?"))return;
-
-try{
-await db.collection("orders").doc(id).update({
-status:"Cancelled"
-});
-}catch(error){
-alert(error.message);
-}
+ db.collection("orders").doc(id).update({
+   status:status
+ })
+ .then(()=>alert("Order updated!"))
+ .catch(e=>alert(e.message));
 }
 </script>
 </body>
 </html>
-```
