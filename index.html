@@ -3,61 +3,307 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TOPUP BAZAAR BD</title>
+<title>TOPUP BAZAAR BD | Premium Gaming Store</title>
+
 <style>
-*{box-sizing:border-box}
-body{margin:0;background:#080d18;color:white;font-family:Arial,sans-serif}
-header{text-align:center;padding:25px;background:#101c32;border-bottom:2px solid #00c8ff}
-header h1{color:#00c8ff;margin:0}
-header p{color:#bbb}
-main{max-width:650px;margin:25px auto;padding:15px}
-.box{background:#111c30;padding:20px;border-radius:14px;margin-bottom:18px}
-h2{color:#00c8ff}
-button,.btn{background:#00aaff;color:#00101a;border:0;padding:12px 18px;border-radius:8px;font-weight:bold;cursor:pointer;margin:5px}
-button:hover{background:#55d5ff}
-input,select{width:100%;padding:13px;margin:8px 0 15px;border-radius:8px;border:1px solid #345;background:#091323;color:white}
-.package{background:#1b2b43;padding:14px;border-radius:9px;margin:9px 0;display:flex;justify-content:space-between;align-items:center;gap:8px}
-.package button{margin:0}
-.small{color:#aab8cc;font-size:14px}
-#status{color:#ffd166}
-#paymentInfo{background:#091323;padding:12px;border-radius:8px;line-height:1.8}
+*{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+--bg:#080812;
+--card:#121426;
+--blue:#00c8ff;
+--purple:#9b5cff;
+--text:#fff;
+--muted:#a8acc4;
+}
+
+body{
+background:var(--bg);
+color:var(--text);
+font-family:Arial,sans-serif;
+}
+
+header{
+padding:22px 5%;
+display:flex;
+justify-content:space-between;
+align-items:center;
+background:#101020;
+border-bottom:1px solid #29264d;
+position:sticky;
+top:0;
+z-index:10;
+}
+
+.logo{
+font-size:23px;
+font-weight:bold;
+background:linear-gradient(90deg,var(--blue),var(--purple));
+-webkit-background-clip:text;
+color:transparent;
+}
+
+nav a{
+color:white;
+text-decoration:none;
+margin-left:20px;
+font-size:14px;
+}
+
+.hero{
+padding:65px 20px;
+text-align:center;
+background:
+radial-gradient(circle at 20% 20%,#173a66,transparent 40%),
+radial-gradient(circle at 80% 70%,#38205d,transparent 40%),
+#0b0b18;
+}
+
+.hero h1{
+font-size:clamp(30px,6vw,52px);
+margin-bottom:15px;
+}
+
+.gradient{
+background:linear-gradient(90deg,var(--blue),var(--purple));
+-webkit-background-clip:text;
+color:transparent;
+}
+
+.hero p{
+color:var(--muted);
+line-height:1.8;
+}
+
+.hero button{
+margin-top:25px;
+padding:14px 28px;
+border:0;
+border-radius:10px;
+background:linear-gradient(90deg,var(--blue),var(--purple));
+font-weight:bold;
+cursor:pointer;
+}
+
+.container{
+max-width:1100px;
+margin:auto;
+padding:35px 18px;
+}
+
+.section-title{
+font-size:25px;
+margin-bottom:20px;
+}
+
+.games{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(135px,1fr));
+gap:14px;
+}
+
+.game{
+background:var(--card);
+padding:22px 10px;
+border:1px solid #292943;
+border-radius:13px;
+text-align:center;
+cursor:pointer;
+transition:.2s;
+}
+
+.game:hover,.game.active{
+border-color:var(--blue);
+transform:translateY(-3px);
+box-shadow:0 0 18px #00c8ff30;
+}
+
+.game .icon{
+font-size:32px;
+margin-bottom:10px;
+}
+
+.box{
+background:var(--card);
+border:1px solid #292943;
+border-radius:16px;
+padding:23px;
+margin-bottom:22px;
+}
+
+.packages{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:15px;
+}
+
+.package{
+background:#1a1b32;
+border:1px solid #343456;
+padding:18px;
+border-radius:12px;
+}
+
+.package h3{
+margin-bottom:10px;
+}
+
+.price{
+color:var(--blue);
+font-size:22px;
+font-weight:bold;
+margin:12px 0;
+}
+
+button{
+cursor:pointer;
+}
+
+.select-btn{
+width:100%;
+padding:12px;
+border:0;
+border-radius:8px;
+background:linear-gradient(90deg,var(--blue),var(--purple));
+font-weight:bold;
+}
+
+input,select{
+width:100%;
+padding:14px;
+margin:9px 0 17px;
+background:#090b19;
+color:white;
+border:1px solid #383853;
+border-radius:9px;
+outline:none;
+}
+
+input:focus,select:focus{
+border-color:var(--blue);
+}
+
+label{
+font-size:14px;
+color:#d4d5e8;
+}
+
+.submit{
+width:100%;
+padding:15px;
+background:linear-gradient(90deg,var(--blue),var(--purple));
+border:0;
+border-radius:10px;
+font-weight:bold;
+font-size:16px;
+}
+
+#paymentInfo{
+background:#090b19;
+padding:15px;
+border-radius:10px;
+line-height:1.8;
+margin-bottom:15px;
+overflow-wrap:anywhere;
+}
+
+#result{
+margin-top:15px;
+color:#00e5a0;
+line-height:1.7;
+}
+
+footer{
+text-align:center;
+padding:30px;
+background:#101020;
+color:var(--muted);
+line-height:2;
+}
+
+.small{
+color:var(--muted);
+font-size:13px;
+}
+
+@media(max-width:600px){
+header{padding:17px 12px}
+.logo{font-size:18px}
+nav a{margin-left:8px;font-size:12px}
+.hero{padding:50px 15px}
+.box{padding:17px}
+}
 </style>
 </head>
+
 <body>
 
 <header>
-<h1>⚡ TOPUP BAZAAR BD</h1>
-<p>Your Trusted Gaming Top-Up Store</p>
+<div class="logo">⚡ TOPUP BAZAAR BD</div>
+<nav>
+<a href="#games">Games</a>
+<a href="#order">Order</a>
+</nav>
 </header>
 
-<main>
-<div class="box">
-<h2>🎮 Select Game</h2>
-<div id="games">
-<button onclick="choose('Free Fire')">Free Fire</button>
-<button onclick="choose('PUBG Mobile')">PUBG Mobile</button>
-<button onclick="choose('FC Mobile')">FC Mobile</button>
-<button onclick="choose('eFootball')">eFootball</button>
-<button onclick="choose('Mobile Legends')">Mobile Legends</button>
-<button onclick="choose('Roblox')">Roblox</button>
-</div>
+<section class="hero">
+<h1>LEVEL UP YOUR <span class="gradient">GAMING</span></h1>
+<p>Your Trusted Gaming Top-Up Store in Bangladesh.</p>
+<p>Fast • Secure • Reliable</p>
+<button onclick="document.getElementById('games').scrollIntoView({behavior:'smooth'})">
+EXPLORE GAMES
+</button>
+</section>
+
+<main class="container">
+
+<section id="games">
+<h2 class="section-title">🎮 Select Your Game</h2>
+
+<div class="games">
+
+<div class="game" onclick="choose('Free Fire',this)">
+<div class="icon">🔥</div>Free Fire
 </div>
 
-<div class="box">
-<h2>💎 Available Packages</h2>
+<div class="game" onclick="choose('PUBG Mobile',this)">
+<div class="icon">🎯</div>PUBG Mobile
+</div>
+
+<div class="game" onclick="choose('FC Mobile',this)">
+<div class="icon">⚽</div>FC Mobile
+</div>
+
+<div class="game" onclick="choose('eFootball',this)">
+<div class="icon">🏆</div>eFootball
+</div>
+
+<div class="game" onclick="choose('Mobile Legends',this)">
+<div class="icon">⚔️</div>Mobile Legends
+</div>
+
+<div class="game" onclick="choose('Roblox',this)">
+<div class="icon">🧱</div>Roblox
+</div>
+
+</div>
+</section>
+
+<section class="box" style="margin-top:30px">
+<h2 class="section-title">💎 Available Packages</h2>
 <p id="selectedGame" class="small">প্রথমে একটি Game নির্বাচন করো।</p>
-<div id="packages">Package লোড হচ্ছে...</div>
-<p id="status"></p>
-</div>
+<br>
+<div id="packages">Loading Packages...</div>
+</section>
 
-<div class="box">
-<h2>🛒 Place Your Order</h2>
+<section class="box" id="order">
+<h2 class="section-title">🛒 Place Your Order</h2>
 
 <label>Selected Package</label>
-<input id="selectedPackage" readonly placeholder="একটি Package নির্বাচন করো">
+<input id="selectedPackage" readonly placeholder="Package নির্বাচন করো">
 
 <label>Player ID</label>
-<input id="playerId" placeholder="তোমার Game Player ID লিখো">
+<input id="playerId" placeholder="তোমার Game Player ID">
 
 <label>Payment Method</label>
 <select id="payment" onchange="showPayment()">
@@ -66,160 +312,204 @@ input,select{width:100%;padding:13px;margin:8px 0 15px;border-radius:8px;border:
 <option value="Nagad">Nagad</option>
 </select>
 
-<div id="paymentInfo">Payment Method নির্বাচন করো।</div>
-
-<label>Transaction ID (TrxID)</label>
-<input id="trxId" placeholder="পেমেন্ট করার পর TrxID লিখো">
-
-<button onclick="sendOrder()">✅ Submit Order</button>
-<p id="result"></p>
+<div id="paymentInfo">
+Payment Method নির্বাচন করো।
 </div>
+
+<label>Transaction ID</label>
+<input id="trxId" placeholder="Payment TrxID">
+
+<button class="submit" onclick="sendOrder()">
+CONFIRM ORDER
+</button>
+
+<p id="result"></p>
+
+<p class="small" style="margin-top:15px">
+নোট: Payment যাচাই না হওয়া পর্যন্ত Order Pending থাকবে।
+</p>
+</section>
+
 </main>
+
+<footer>
+<h3 class="gradient">TOPUP BAZAAR BD</h3>
+Your Trusted Gaming Top-Up Store<br>
+© 2026 TOPUP BAZAAR BD. All Rights Reserved.
+</footer>
 
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 
 <script>
 const firebaseConfig = {
-  apiKey: "AIzaSyDwXSVZLSxEVtNhePV3XGO42DXqolJNNUE",
-  authDomain: "topup-bazaar-bd.firebaseapp.com",
-  projectId: "topup-bazaar-bd",
-  storageBucket: "topup-bazaar-bd.firebasestorage.app",
-  messagingSenderId: "5988939552",
-  appId: "1:5988939552:web:3182e2466ace850f004945"
+apiKey:"AIzaSyDwXSVZLSxEVtNhePV3XGO42DXqolJNNUE",
+authDomain:"topup-bazaar-bd.firebaseapp.com",
+projectId:"topup-bazaar-bd",
+storageBucket:"topup-bazaar-bd.firebasestorage.app",
+messagingSenderId:"5988939552",
+appId:"1:5988939552:web:3182e2466ace850f004945"
 };
 
 firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
+const db=firebase.firestore();
 
-let allPackages = [];
-let currentGame = "";
-let selected = null;
-let paymentSettings = {};
+let allPackages=[];
+let currentGame="";
+let selected=null;
+let paymentSettings={};
 
-db.collection("packages").onSnapshot(snapshot => {
-  allPackages = snapshot.docs.map(doc => ({
-    id: doc.id,
-    ...doc.data()
-  }));
-  showPackages();
-}, error => {
-  document.getElementById("packages").innerText =
-    "Package লোড হয়নি: " + error.message;
+db.collection("packages").onSnapshot(snapshot=>{
+allPackages=snapshot.docs.map(doc=>({
+id:doc.id,...doc.data()
+}));
+showPackages();
+},error=>{
+document.getElementById("packages").textContent=error.message;
 });
 
 db.collection("paymentSettings").doc("main").get()
-.then(doc => {
-  if(doc.exists) paymentSettings = doc.data();
-  showPayment();
-})
-.catch(error => {
-  document.getElementById("paymentInfo").innerText =
-    "Payment তথ্য লোড হয়নি: " + error.message;
+.then(doc=>{
+if(doc.exists) paymentSettings=doc.data();
+showPayment();
 });
 
-function choose(game){
-  currentGame = game;
-  selected = null;
-  document.getElementById("selectedPackage").value = "";
-  document.getElementById("selectedGame").innerText = "Selected Game: " + game;
-  showPackages();
+function choose(game,element){
+currentGame=game;
+selected=null;
+
+document.querySelectorAll(".game").forEach(el=>{
+el.classList.remove("active");
+});
+
+element.classList.add("active");
+
+document.getElementById("selectedGame").textContent=
+"Selected Game: "+game;
+
+document.getElementById("selectedPackage").value="";
+showPackages();
 }
 
 function showPackages(){
-  const area = document.getElementById("packages");
+const area=document.getElementById("packages");
+area.innerHTML="";
 
-  if(!currentGame){
-    area.innerText = "প্রথমে একটি Game নির্বাচন করো।";
-    return;
-  }
+if(!currentGame){
+area.textContent="প্রথমে একটি Game নির্বাচন করো।";
+return;
+}
 
-  const list = allPackages.filter(p => p.game === currentGame);
+const list=allPackages.filter(p=>p.game===currentGame);
 
-  if(list.length === 0){
-    area.innerText = "এই Game-এর কোনো Package পাওয়া যায়নি।";
-    return;
-  }
+if(!list.length){
+area.textContent="এই Game-এর Package এখনো পাওয়া যায়নি।";
+return;
+}
 
-  area.innerHTML = "";
+const grid=document.createElement("div");
+grid.className="packages";
 
-  list.forEach(p => {
-    const row = document.createElement("div");
-    row.className = "package";
+list.forEach(p=>{
+const card=document.createElement("div");
+card.className="package";
 
-    const info = document.createElement("span");
-    info.textContent = p.name + " — ৳" + p.price;
+const title=document.createElement("h3");
+title.textContent="💎 "+p.name;
 
-    const btn = document.createElement("button");
-    btn.textContent = "Select";
-    btn.onclick = () => {
-      selected = p;
-      document.getElementById("selectedPackage").value =
-        p.name + " — ৳" + p.price;
-    };
+const price=document.createElement("div");
+price.className="price";
+price.textContent="৳"+p.price;
 
-    row.appendChild(info);
-    row.appendChild(btn);
-    area.appendChild(row);
-  });
+const btn=document.createElement("button");
+btn.className="select-btn";
+btn.textContent="SELECT PACKAGE";
+
+btn.onclick=()=>{
+selected=p;
+document.getElementById("selectedPackage").value=
+p.name+" — ৳"+p.price;
+
+document.getElementById("order").scrollIntoView({
+behavior:"smooth"
+});
+};
+
+card.append(title,price,btn);
+grid.appendChild(card);
+});
+
+area.appendChild(grid);
 }
 
 function showPayment(){
-  const method = document.getElementById("payment").value;
-  const info = document.getElementById("paymentInfo");
+const method=document.getElementById("payment").value;
+const info=document.getElementById("paymentInfo");
 
-  if(!method){
-    info.innerText = "Payment Method নির্বাচন করো।";
-    return;
-  }
+info.textContent="";
 
-  const number = method === "bKash"
-    ? paymentSettings.bkash
-    : paymentSettings.nagad;
+if(!method){
+info.textContent="Payment Method নির্বাচন করো।";
+return;
+}
 
-  if(!number){
-    info.innerText = method + " নম্বর এখনো Admin সেট করেনি।";
-    return;
-  }
+const number=method==="bKash"
+?paymentSettings.bkash
+:paymentSettings.nagad;
 
-  info.innerHTML =
-    "<b>" + method + " Personal/Business Number:</b><br>" +
-    "<span style='color:#00c8ff;font-size:22px'>" + number + "</span><br>" +
-    "পেমেন্ট করার পর Transaction ID লিখে Order Submit করো।";
+const title=document.createElement("b");
+title.textContent=method+" Payment Number: ";
+
+const numberText=document.createElement("span");
+numberText.style.color="#00c8ff";
+numberText.style.fontSize="21px";
+numberText.textContent=number||"Admin এখনো নম্বর সেট করেনি।";
+
+info.append(title,document.createElement("br"),numberText);
+
+const note=document.createElement("p");
+note.className="small";
+note.textContent="শুধু Admin-এর অনুমোদিত Payment পদ্ধতি অনুসরণ করো।";
+info.appendChild(note);
 }
 
 async function sendOrder(){
-  const playerId = document.getElementById("playerId").value.trim();
-  const payment = document.getElementById("payment").value;
-  const trxId = document.getElementById("trxId").value.trim();
-  const result = document.getElementById("result");
+const playerId=document.getElementById("playerId").value.trim();
+const payment=document.getElementById("payment").value;
+const trxId=document.getElementById("trxId").value.trim();
+const result=document.getElementById("result");
 
-  if(!selected) return alert("আগে একটি Package নির্বাচন করো।");
-  if(!playerId) return alert("Player ID লিখো।");
-  if(!payment) return alert("Payment Method নির্বাচন করো।");
-  if(!trxId) return alert("Transaction ID লিখো।");
+if(!selected)return alert("একটি Package নির্বাচন করো।");
+if(!playerId)return alert("Player ID লিখো।");
+if(!payment)return alert("Payment Method নির্বাচন করো।");
+if(!trxId)return alert("Transaction ID লিখো।");
 
-  result.innerText = "Order জমা হচ্ছে...";
+result.textContent="Order জমা হচ্ছে...";
 
-  try{
-    await db.collection("orders").add({
-      game: currentGame,
-      playerId: playerId,
-      package: selected.name,
-      packagePrice: Number(selected.price),
-      payment: payment,
-      transactionId: trxId,
-      status: "Pending",
-      createdAt: firebase.firestore.FieldValue.serverTimestamp()
-    });
+try{
+const ref=await db.collection("orders").add({
+game:currentGame,
+playerId:playerId,
+package:selected.name,
+packagePrice:Number(selected.price),
+payment:payment,
+transactionId:trxId,
+status:"Pending",
+createdAt:firebase.firestore.FieldValue.serverTimestamp()
+});
 
-    result.innerText = "✅ Order সফলভাবে জমা হয়েছে!";
-    document.getElementById("playerId").value = "";
-    document.getElementById("trxId").value = "";
-  }catch(error){
-    result.innerText = "Order জমা হয়নি: " + error.message;
-  }
+result.textContent=
+"✅ Order জমা হয়েছে! তোমার Order ID: "+ref.id+
+" | Payment যাচাই না হওয়া পর্যন্ত Pending থাকবে।";
+
+document.getElementById("playerId").value="";
+document.getElementById("trxId").value="";
+
+}catch(error){
+result.textContent="Order জমা হয়নি: "+error.message;
+}
 }
 </script>
+
 </body>
 </html>
