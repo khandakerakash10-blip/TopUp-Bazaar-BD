@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="bn">
 <head>
@@ -8,106 +7,30 @@
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{
-background:#070b16;
-color:white;
-font-family:Arial,sans-serif;
-}
-header{
-background:#10182a;
-padding:20px;
-display:flex;
-justify-content:space-between;
-align-items:center;
-flex-wrap:wrap;
-border-bottom:2px solid #00d9ff;
-}
+body{background:#070b16;color:white;font-family:Arial,sans-serif}
+header{background:#10182a;padding:20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;border-bottom:2px solid #00d9ff}
 .logo{font-size:23px;color:#00e5ff;font-weight:bold}
-nav a{
-color:white;
-text-decoration:none;
-margin:10px;
-}
-.hero{
-text-align:center;
-padding:65px 15px;
-background:linear-gradient(135deg,#10264b,#080d19);
-}
-.hero h1{
-font-size:36px;
-color:#00e5ff;
-}
+nav a{color:white;text-decoration:none;margin:10px}
+.hero{text-align:center;padding:65px 15px;background:linear-gradient(135deg,#10264b,#080d19)}
+.hero h1{font-size:36px;color:#00e5ff}
 .hero p{margin:15px;color:#ccc}
-.container{
-max-width:1100px;
-margin:auto;
-padding:35px 15px;
-}
-.title{
-text-align:center;
-color:#00e5ff;
-margin-bottom:30px;
-}
-.games{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-gap:20px;
-}
-.card{
-background:#121e35;
-border:1px solid #24466b;
-border-radius:15px;
-padding:25px;
-text-align:center;
-transition:.3s;
-}
-.card:hover{
-transform:translateY(-7px);
-border-color:#00e5ff;
-box-shadow:0 0 18px #007caa55;
-}
+.container{max-width:1100px;margin:auto;padding:35px 15px}
+.title{text-align:center;color:#00e5ff;margin-bottom:30px}
+.games{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px}
+.card{background:#121e35;border:1px solid #24466b;border-radius:15px;padding:25px;text-align:center;transition:.3s}
+.card:hover{transform:translateY(-7px);border-color:#00e5ff;box-shadow:0 0 18px #007caa55}
 .icon{font-size:48px}
 .card h3{margin:12px}
 .card p{color:#aaa}
-button{
-background:#00d9ff;
-border:none;
-padding:12px 20px;
-border-radius:8px;
-font-weight:bold;
-cursor:pointer;
-}
+button{background:#00d9ff;border:none;padding:12px 20px;border-radius:8px;font-weight:bold;cursor:pointer}
 button:hover{background:white}
 .card button{margin-top:18px}
-.order{
-max-width:520px;
-margin:35px auto;
-background:#121e35;
-padding:25px;
-border-radius:15px;
-border:1px solid #24466b;
-}
-input,select{
-width:100%;
-padding:14px;
-margin:9px 0;
-border-radius:7px;
-border:1px solid #345;
-background:#080f20;
-color:white;
-}
+.order{max-width:520px;margin:35px auto;background:#121e35;padding:25px;border-radius:15px;border:1px solid #24466b}
+input,select{width:100%;padding:14px;margin:9px 0;border-radius:7px;border:1px solid #345;background:#080f20;color:white}
 .order button{width:100%;margin-top:15px}
-.note{
-color:#ffc857;
-font-size:13px;
-margin-top:12px;
-}
-footer{
-background:#10182a;
-padding:30px;
-text-align:center;
-color:#aaa;
-}
+.note{color:#ffc857;font-size:13px;margin-top:12px}
+footer{background:#10182a;padding:30px;text-align:center;color:#aaa}
+#message{text-align:center;margin-top:15px;color:#00e5ff}
 </style>
 </head>
 
@@ -182,17 +105,14 @@ SHOP NOW
 <div class="order" id="order">
 <h2 class="title">🛒 PLACE YOUR ORDER</h2>
 
-<form onsubmit="sendOrder(event)">
+<form id="orderForm" onsubmit="sendOrder(event)">
 
 <input id="game" placeholder="Selected Game" readonly required>
 
 <input id="uid" placeholder="Player ID / UID" required>
 
 <select id="pack" required>
-<option value="">Select Package</option>
-<option>Small Package</option>
-<option>Medium Package</option>
-<option>Large Package</option>
+<option value="">Loading Packages...</option>
 </select>
 
 <select id="payment" required>
@@ -202,12 +122,15 @@ SHOP NOW
 <option>Rocket</option>
 </select>
 
-<button type="submit">ORDER ON WHATSAPP</button>
+<button type="submit" id="orderButton">CONFIRM ORDER</button>
 
 </form>
 
+<p id="message"></p>
+
 <p class="note">
-Demo Store: পেমেন্ট করার আগে Admin-এর সঙ্গে যোগাযোগ করুন।
+অর্ডার জমা দেওয়ার পর Admin-এর সঙ্গে পেমেন্ট নিশ্চিত করুন।
+এটি এখনো Manual Payment System।
 </p>
 </div>
 </section>
@@ -218,38 +141,107 @@ Demo Store: পেমেন্ট করার আগে Admin-এর সঙ্�
 <p>© 2026 All Rights Reserved</p>
 </footer>
 
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
 <script>
+const firebaseConfig = {
+  apiKey: "AIzaSyDwXSVZLSxEVtNhePV3xGO42DXqolJNNUE",
+  authDomain: "topup-bazaar-bd.firebaseapp.com",
+  projectId: "topup-bazaar-bd",
+  storageBucket: "topup-bazaar-bd.firebasestorage.app",
+  messagingSenderId: "5988939552",
+  appId: "1:5988939552:web:3182e2466ace850f004945"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+let allPackages = [];
+
+db.collection("packages").onSnapshot(snapshot => {
+  allPackages = [];
+  snapshot.forEach(doc => {
+    allPackages.push({id:doc.id,...doc.data()});
+  });
+
+  updatePackages();
+}, error => {
+  document.getElementById("message").innerText =
+    "Package load error: " + error.message;
+});
+
 function choose(name){
-document.getElementById('game').value=name;
-document.getElementById('order').scrollIntoView({behavior:'smooth'});
+  document.getElementById("game").value = name;
+  updatePackages();
+  document.getElementById("order").scrollIntoView({behavior:"smooth"});
 }
 
-function sendOrder(e){
-e.preventDefault();
+function updatePackages(){
+  const game = document.getElementById("game").value;
+  const select = document.getElementById("pack");
 
-const game=document.getElementById('game').value;
-const uid=document.getElementById('uid').value;
-const pack=document.getElementById('pack').value;
-const payment=document.getElementById('payment').value;
+  select.innerHTML = '<option value="">Select Package</option>';
 
-// নিজের WhatsApp নম্বর এখানে বসাবে
-const adminNumber="8801XXXXXXXXX";
+  const filtered = allPackages.filter(p => p.game === game);
 
-const msg=`New Order - TOPUP BAZAAR BD
-Game: ${game}
-Player ID: ${uid}
-Package: ${pack}
-Payment: ${payment}`;
+  filtered.forEach(p => {
+    const option = document.createElement("option");
+    option.value = p.id;
+    option.textContent = p.name + " - ৳" + p.price;
+    select.appendChild(option);
+  });
 
-if(adminNumber==="8801XXXXXXXXX"){
-alert("Admin WhatsApp number সেট করা হয়নি।");
-return;
+  if(game && filtered.length === 0){
+    select.innerHTML = '<option value="">এই গেমের Package নেই</option>';
+  }
 }
 
-window.open("https://wa.me/"+adminNumber+"?text="+encodeURIComponent(msg),"_blank");
+async function sendOrder(e){
+  e.preventDefault();
+
+  const game = document.getElementById("game").value;
+  const uid = document.getElementById("uid").value.trim();
+  const packId = document.getElementById("pack").value;
+  const payment = document.getElementById("payment").value;
+
+  const selectedPackage = allPackages.find(p => p.id === packId);
+
+  if(!game || !uid || !selectedPackage || !payment){
+    alert("সব তথ্য সঠিকভাবে পূরণ করো!");
+    return;
+  }
+
+  const button = document.getElementById("orderButton");
+  const message = document.getElementById("message");
+
+  button.disabled = true;
+  button.textContent = "Submitting...";
+  message.textContent = "অর্ডার জমা হচ্ছে...";
+
+  try{
+    const orderRef = await db.collection("orders").add({
+      game: game,
+      playerId: uid,
+      package: selectedPackage.name,
+      packagePrice: Number(selectedPackage.price),
+      payment: payment,
+      status: "Pending",
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+
+    message.textContent = "✅ অর্ডার সফলভাবে জমা হয়েছে! Order ID: " + orderRef.id;
+    document.getElementById("orderForm").reset();
+    updatePackages();
+
+  }catch(error){
+    message.textContent = "অর্ডার জমা হয়নি: " + error.message;
+  }
+
+  button.disabled = false;
+  button.textContent = "CONFIRM ORDER";
 }
 </script>
 
 </body>
 </html>
-```
